@@ -8,7 +8,6 @@ import { PrismaClient } from "@prisma/client";
 dotenv.config();
 const app = express();
 
-// ✅ Use a global PrismaClient to prevent prepared statement errors
 let prisma;
 if (process.env.NODE_ENV === "production") {
   prisma = new PrismaClient();
@@ -22,7 +21,7 @@ if (process.env.NODE_ENV === "production") {
 app.use(cors());
 app.use(express.json());
 
-// Auth middleware
+
 function authMiddleware(req, res, next) {
   const authHeader = req.headers["authorization"];
   if (!authHeader) return res.status(401).json({ error: "No token" });
@@ -34,7 +33,7 @@ function authMiddleware(req, res, next) {
   });
 }
 
-// Register
+
 app.post("/api/auth/register", async (req, res) => {
   const { email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
@@ -46,7 +45,7 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// Login
+
 app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -68,10 +67,10 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// Get leads with pagination
+
 app.get("/api/leads", authMiddleware, async (req, res) => {
-  const page = parseInt(req.query.page) || 1;      // default page 1
-  const limit = parseInt(req.query.limit) || 5;    // default 5 leads per page
+  const page = parseInt(req.query.page) || 1;     
+  const limit = parseInt(req.query.limit) || 5;    
   const skip = (page - 1) * limit;
 
   try {
@@ -97,14 +96,14 @@ app.get("/api/leads", authMiddleware, async (req, res) => {
 });
 
 
-// Add new lead
+
 app.post("/api/leads", authMiddleware, async (req, res) => {
   const { name, email, phone, status } = req.body;
   const lead = await prisma.lead.create({ data: { name, email, phone, status } });
   res.json(lead);
 });
 
-// Update lead
+
 app.put("/api/leads/:id", authMiddleware, async (req, res) => {
   const { id } = req.params;
   const { name, email, phone, status } = req.body;
@@ -119,7 +118,7 @@ app.put("/api/leads/:id", authMiddleware, async (req, res) => {
   }
 });
 
-// Delete lead
+
 app.delete("/api/leads/:id", authMiddleware, async (req, res) => {
   const { id } = req.params;
   try {
