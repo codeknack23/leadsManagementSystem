@@ -129,5 +129,27 @@ app.delete("/api/leads/:id", authMiddleware, async (req, res) => {
   }
 });
 
+
+
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
+
+
+const keepAlive = async () => {
+  try {
+    await axios.get(`https://your-app-name.onrender.com/ping`);
+    console.log("Pinged self to stay awake!");
+  } catch (err) {
+    console.error("Failed to ping self:", err.message);
+  }
+};
+
+
+setInterval(keepAlive, 60 * 1000);
+
+
+keepAlive();
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
