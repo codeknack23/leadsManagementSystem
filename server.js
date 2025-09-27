@@ -138,7 +138,7 @@ app.get("/ping", (req, res) => {
 
 const keepAlive = async () => {
   try {
-    await axios.get(`https://your-app-name.onrender.com/ping`);
+    await axios.get(`https://leadsmanagementsystem.onrender.com/ping`);
     console.log("Pinged self to stay awake!");
   } catch (err) {
     console.error("Failed to ping self:", err.message);
