@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
-import axios from "axios";
+
 
 dotenv.config();
 const app = express();
@@ -132,25 +132,6 @@ app.delete("/api/leads/:id", authMiddleware, async (req, res) => {
 
 
 
-app.get("/ping", (req, res) => {
-  res.send("pong");
-});
-
-
-const keepAlive = async () => {
-  try {
-    await axios.get(`https://leadsmanagementsystem.onrender.com/ping`);
-    console.log("Pinged self to stay awake!");
-  } catch (err) {
-    console.error("Failed to ping self:", err.message);
-  }
-};
-
-
-setInterval(keepAlive, 60 * 1000);
-
-
-keepAlive();
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
